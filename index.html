@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#17151d">
+<title>后会友期｜你是他们中的谁？</title>
+<style>
+:root{--bg:#17151d;--panel:#24212b;--muted:#b8b0bd;--cream:#f4e9dc;--rose:#d99a9c;--gold:#d9bd91}
+*{box-sizing:border-box} body{margin:0;background:radial-gradient(ellipse at 50% 0%,#45313d 0,#211d27 42%,#121117 100%);color:var(--cream);font-family:"PingFang SC","Microsoft YaHei",sans-serif;min-height:100vh}
+.wrap{width:min(900px,92vw);margin:auto;padding:28px 0 60px}.top{display:flex;justify-content:space-between;align-items:center;color:#d8c9c7;font-size:13px;letter-spacing:2px}
+.hero{text-align:center;padding:68px 12px 38px}.eyebrow{color:var(--gold);letter-spacing:5px;font-size:12px}.hero h1{font-size:clamp(42px,9vw,76px);letter-spacing:8px;margin:18px 0 12px;font-weight:500}.sub{color:#d8cbd0;letter-spacing:2px;font-size:15px}.desc{color:var(--muted);line-height:1.9;font-size:14px;max-width:520px;margin:22px auto}
+.line{height:1px;width:70px;background:var(--rose);margin:28px auto}
+button{border:0;cursor:pointer;font:inherit}.primary{background:linear-gradient(120deg,#e3b8ad,#c98f9a);color:#211a22;padding:15px 36px;border-radius:3px;letter-spacing:3px;font-weight:600;transition:.2s}.primary:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.note{font-size:12px;color:#9c929f;margin-top:18px}
+.panel{background:rgba(35,31,42,.88);border:1px solid rgba(232,201,193,.17);padding:clamp(22px,5vw,42px);border-radius:8px;box-shadow:0 20px 70px #09080c66}
+.progress-row{display:flex;justify-content:space-between;color:#b8aab5;font-size:12px;letter-spacing:1px;margin-bottom:12px}.track{height:3px;background:#514451;margin-bottom:34px}.fill{height:100%;background:var(--rose);transition:width .3s}
+.qnum{color:var(--gold);font-size:12px;letter-spacing:3px}.question{font-size:clamp(21px,4vw,29px);line-height:1.6;font-weight:500;margin:14px 0 28px}
+.answers{display:grid;gap:12px}.answer{width:100%;text-align:left;padding:17px 18px;border:1px solid #5a4b5a;background:#2b2632;color:#eee1df;border-radius:4px;line-height:1.6;transition:.2s}.answer:hover{border-color:var(--rose);background:#3a2e3b;transform:translateX(3px)}
+.hidden{display:none!important}.result{text-align:center}.result-kicker{color:var(--gold);letter-spacing:4px;font-size:12px}.result h2{font-size:clamp(32px,7vw,52px);font-weight:500;letter-spacing:5px;margin:18px 0 10px}.result .tag{display:inline-block;border:1px solid #96747d;color:#e5b9b7;padding:6px 15px;font-size:12px;letter-spacing:2px;margin:10px}
+.result p{color:#d4c7cf;line-height:2;font-size:15px;max-width:590px;margin:18px auto}.quote{color:var(--gold)!important;font-size:17px!important;letter-spacing:1px;margin:26px auto!important}.result-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px}.secondary{background:transparent;border:1px solid #8d7786;color:#eadcde;padding:13px 22px;border-radius:3px;letter-spacing:2px}
+.footer{text-align:center;color:#857b89;font-size:11px;line-height:1.8;margin-top:34px}
+@media(max-width:520px){.hero{padding-top:50px}.top span:last-child{display:none}.answer{padding:15px}.panel{padding:22px 18px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+ <div class="top"><span>AFTER THIS JOURNEY</span><span>一场关于友情与重逢的测试</span></div>
+ <section id="intro" class="hero">
+  <div class="eyebrow">关于相遇 · 关于告别 · 关于再次出发</div>
+  <h1>后会友期</h1>
+  <div class="sub">测测你在这段旅程里，最像谁？</div>
+  <div class="line"></div>
+  <p class="desc">如果把人生比作一场旅行，你会是那个认真倾听的人、勇敢表达的人，还是默默记住所有细节的人？<br>回答 8 道情境题，看看哪一种相处方式最像你。</p>
+  <button class="primary" onclick="startQuiz()">开始测试</button>
+  <div class="note">共 8 题 · 约 2 分钟 · 没有标准答案</div>
+ </section>
+ <section id="quiz" class="panel hidden">
+  <div class="progress-row"><span id="step">QUESTION 01 / 08</span><span id="pct">12%</span></div>
+  <div class="track"><div id="bar" class="fill" style="width:12.5%"></div></div>
+  <div class="qnum" id="qnum">NO. 01</div>
+  <div class="question" id="question"></div>
+  <div class="answers" id="answers"></div>
+ </section>
+ <section id="result" class="panel result hidden">
+  <div class="result-kicker">YOUR JOURNEY COMPANION</div>
+  <div class="line"></div>
+  <div style="color:#b9aab7;font-size:13px;letter-spacing:2px">与你最相似的相处型人格</div>
+  <h2 id="rname"></h2><span class="tag" id="rtag"></span>
+  <p id="rdesc"></p><p class="quote" id="rquote"></p><p id="rrelation"></p>
+  <div class="result-actions"><button class="primary" onclick="restart()">再测一次</button><button class="secondary" onclick="shareResult()">分享结果</button></div>
+ </section>
+ <div class="footer">本测试为娱乐向性格匹配内容，不代表对节目嘉宾真实性格的评价。<br>人物结果为粉丝向创作设定，非节目官方测试。</div>
+</main>
+<script>
+const people=[
+{name:"许飞",tag:"直率行动派",desc:"你更习惯用行动表达在意。比起绕弯子，你喜欢把话说开；比起空口承诺，你更愿意在朋友需要时出现。你有自己的节奏，也珍惜坦诚、不拧巴的关系。",quote:"真正的在意，不一定声势浩大，但会落在行动里。",relation:"在友情里，你需要真诚和空间。给彼此一点自由，反而能走得更远。"},
+{name:"厉娜",tag:"温柔共情派",desc:"你很会察觉气氛，也愿意认真听别人说话。你不一定总把情绪挂在嘴边，却常常记得朋友无意间提起的小事。你的温柔不是讨好，而是一种细腻的理解。",quote:"被认真听见，本身就是一种温柔。",relation:"在友情里，你重视情绪上的回应。记得也把自己的感受说出来，让关心双向流动。"},
+{name:"马天宇",tag:"安静守护派",desc:"你不爱把关系说得轰轰烈烈，却会用稳定的陪伴表达珍惜。你观察细致，心里有柔软的位置留给重要的人。即使不常联系，你也相信真正的情谊不会轻易走散。",quote:"有些陪伴很安静，却一直都在。",relation:"在友情里，你看重长久和信任。偶尔主动问候，会让对方更清楚你的珍惜。"},
+{name:"张萌",tag:"热情连接派",desc:"你擅长打开话题、带动气氛，也愿意主动创造相聚的机会。你相信关系需要经营，喜欢把不同的人连接起来，让平凡日子也有值得记住的片段。",quote:"相遇不是偶然，愿意靠近才有故事。",relation:"在友情里，你是很好的发起者。也别忘了留一点安静时间，听听自己真正想要什么。"},
+{name:"王子璇",tag:"真诚成长派",desc:"你愿意尝试新事物，也愿意在关系中不断认识自己。面对分歧，你倾向于沟通和调整；面对变化，你相信人可以一起成长，而不必永远停留在某个阶段。",quote:"好的关系，让我们都成为更自在的人。",relation:"在友情里，你需要共同成长的感觉。允许彼此变化，也允许关系拥有新的模样。"},
+{name:"文吉儿",tag:"自由随性派",desc:"你喜欢轻松自然的相处，不太愿意被固定模式束缚。你能享受热闹，也能自在独处；对你来说，舒服比形式重要，真心比频率重要。",quote:"不必时时刻刻在一起，也可以一直惦记。",relation:"在友情里，你珍惜不费力的默契。主动表达想念，能让你的自在不被误解为疏远。"},
+{name:"青稚",tag:"细节收藏派",desc:"你对共同经历有很强的记忆力，一句话、一张照片、一个小习惯，都可能成为你珍藏的片段。你不轻易定义关系，却会认真对待每一次相遇。",quote:"旅程会结束，但记忆会替我们保留温度。",relation:"在友情里，你重视共同回忆。试着把珍惜说出口，让回忆不只留在心里。"},
+{name:"白小纯",tag:"乐观治愈派",desc:"你有把沉闷气氛变轻松的能力，遇到小挫折时也愿意先往好处想。你不代表没有烦恼，只是愿意给自己和身边的人一点积极的力量。",quote:"生活偶尔绕路，也别忘了沿途有风景。",relation:"在友情里，你常常是带来快乐的人。也允许自己偶尔脆弱，朋友同样愿意接住你。"}
+];
+const questions=[
+{q:"一群朋友久别重逢，你最可能先做什么？",a:["主动打招呼，直接聊起近况","先观察大家的状态，找机会加入","安静听大家聊天，慢慢进入状态","开个玩笑，让气氛先热起来"]},
+{q:"朋友突然情绪低落，你会？",a:["直接问发生了什么，想办法解决","耐心听对方说，不急着给建议","默默陪着，做些实际的小事","想办法逗对方开心，带他出去走走"]},
+{q:"你觉得一段友情最重要的是什么？",a:["坦诚，有话直说","理解，能接住彼此情绪","信任，时间久了依然可靠","轻松自在，不用刻意维系"]},
+{q:"旅行途中临时改变计划，你会？",a:["迅速想出新方案，继续出发","先确认大家的感受和需求","不慌，顺其自然就好","把变化当惊喜，享受未知"]},
+{q:"朋友无意间说了一句让你难过的话，你会？",a:["当下说清楚，不喜欢猜来猜去","先消化情绪，再温和沟通","暂时不说，但会记在心里","换个话题缓和气氛，之后再看"]},
+{q:"多年没见的老朋友联系你，你最在意？",a:["能不能像以前一样坦诚聊天","对方是否还记得彼此的小事","即使不常联系，信任是否还在","见面能不能自然开心，不尴尬"]},
+{q:"如果要给朋友准备一份惊喜，你更倾向于？",a:["安排一次特别的体验","准备一份有心意、很贴合对方的礼物","默默完成对方一直需要的小事","组织大家聚在一起热热闹闹"]},
+{q:"旅程结束、大家即将分别，你会？",a:["认真表达感谢，也约好下次见面","把不舍说出来，珍惜告别时刻","记住这段经历，保持长久联系","笑着挥手，相信下次还会相遇"]}
+];
+// 每个选项把倾向分配给8种结果；题目选项循环覆盖不同特质
+const mapping=[[0,3,2,7],[1,2,4,7],[0,1,2,5],[3,4,5,7],[0,1,2,6],[2,4,5,6],[3,1,0,7],[1,2,6,5]];
+let idx=0, scores=Array(8).fill(0);
+function startQuiz(){idx=0;scores=Array(8).fill(0);document.getElementById('intro').classList.add('hidden');document.getElementById('result').classList.add('hidden');document.getElementById('quiz').classList.remove('hidden');renderQ()}
+function renderQ(){const q=questions[idx];document.getElementById('step').textContent=`QUESTION ${String(idx+1).padStart(2,'0')} / 08`;document.getElementById('pct').textContent=Math.round((idx+1)/8*100)+'%';document.getElementById('bar').style.width=((idx+1)/8*100)+'%';document.getElementById('qnum').textContent='NO. '+String(idx+1).padStart(2,'0');document.getElementById('question').textContent=q.q;const box=document.getElementById('answers');box.innerHTML='';q.a.forEach((a,j)=>{const b=document.createElement('button');b.className='answer';b.textContent=String.fromCharCode(65+j)+'  '+a;b.onclick=()=>choose(j);box.appendChild(b)})}
+function choose(j){scores[mapping[idx][j]]++;idx++;if(idx<questions.length)renderQ();else showResult()}
+function showResult(){document.getElementById('quiz').classList.add('hidden');const max=Math.max(...scores);let winners=scores.map((v,i)=>v===max?i:-1).filter(i=>i>=0);const p=people[winners[Math.floor(Math.random()*winners.length)]];document.getElementById('rname').textContent=p.name;document.getElementById('rtag').textContent=p.tag;document.getElementById('rdesc').textContent=p.desc;document.getElementById('rquote').textContent='“'+p.quote+'”';document.getElementById('rrelation').textContent=p.relation;document.getElementById('result').classList.remove('hidden')}
+function restart(){document.getElementById('result').classList.add('hidden');document.getElementById('intro').classList.remove('hidden')}
+function shareResult(){const text=`我在「后会友期」人格测试中，测出了：${document.getElementById('rname').textContent}｜${document.getElementById('rtag').textContent}。你也来测测看！`;if(navigator.share)navigator.share({title:'后会友期人格测试',text});else if(navigator.clipboard){navigator.clipboard.writeText(text).then(()=>alert('结果文案已复制，快去分享给朋友吧！')).catch(()=>alert(text))}else alert(text)}
+</script>
+</body></html>
